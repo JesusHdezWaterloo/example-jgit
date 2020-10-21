@@ -12,6 +12,7 @@ import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 /**
  *
@@ -24,13 +25,30 @@ public class Main {
      */
     public static void main(String[] args) throws Exception {
         Repository localRepo = new FileRepository("C:\\Users\\Yo\\Documents\\NetBeansProjects\\jgit\\.git");
-        Git git = new Git(localRepo);
-        List<Ref> branches = git.branchList().call();
-        for (Ref b : branches) {
-            System.out.println(b.getName());
-        }
-        
-        git.checkout().setName("refs/heads/master").call();
+        String actualBranch = localRepo.getFullBranch();
+        Git git = new Git(localRepo);//git para hacer comandos
+        System.out.println(git.diff().call());
     }
 
+    public static void push() throws Exception {
+        Repository localRepo = new FileRepository("C:\\Users\\Yo\\Documents\\NetBeansProjects\\jgit\\.git");
+        String actualBranch = localRepo.getFullBranch();
+        System.out.println("Rama actual: " + actualBranch);
+        Git git = new Git(localRepo);//git para hacer comandos
+        List<Ref> branches = git.branchList().call();//lista de las ramas
+        for (Ref b : branches) {
+            System.out.println("Cambiando a rama: " + b.getName());
+            git.checkout().setName(b.getName()).call();
+            System.out.println("Pull para actualizar local");
+            git.pull().call();
+            System.out.println("Push para actualizar remote");
+            git.push().setCredentialsProvider(
+                    new UsernamePasswordCredentialsProvider(
+                            "JesusHdezWaterloo",
+                            "A123b456**"
+                    )
+            ).call();
+        }
+        git.checkout().setName(actualBranch).call();
+    }
 }
