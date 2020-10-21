@@ -1,0 +1,18 @@
+plugins {
+    id "edu.sc.seis.launch4j" version "2.4.6"
+    id 'java'
+    id 'application'
+}
+
+mainClassName = 'jgit.Main'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13'
+    
+
+}
