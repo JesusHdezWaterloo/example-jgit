@@ -14,5 +14,6 @@ repositories {
 dependencies {
     testImplementation 'junit:junit:4.13'
     
+    compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '5.9.0.202009080501-r'
 
 }

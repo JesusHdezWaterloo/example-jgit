@@ -5,13 +5,13 @@
  */
 package jgit;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import javax.swing.JOptionPane;
+import java.util.List;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
 
 /**
  *
@@ -23,20 +23,14 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        FileInputStream fis = new FileInputStream(new File("1232.txt"));
-        FileOutputStream fos = new FileOutputStream(new File("1232Out.txt"));
-        byte[] arr = new byte[5];
-        while (fis.read(arr) != -1) {
-            //hacerle cosas al arr, como el cifrado
-            fos.write(reverse(arr));
+        Repository localRepo = new FileRepository("C:\\Users\\Yo\\Documents\\NetBeansProjects\\jgit\\.git");
+        Git git = new Git(localRepo);
+        List<Ref> branches = git.branchList().call();
+        for (Ref b : branches) {
+            System.out.println(b.getName());
         }
+        
+        git.checkout().setName("refs/heads/master").call();
     }
 
-    public static byte[] reverse(byte arr[]) {
-        byte rev[] = new byte[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            rev[rev.length - 1 - i] = arr[i];
-        }
-        return rev;
-    }
 }
